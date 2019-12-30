@@ -25,7 +25,7 @@ func interpretSource(fpath string) string {
 		}
 		op, ok := ic.Ops[ic.Opcode(src.Data[i])]
 		if ok {
-			sum := op(src.Data[i+1], src.Data[i+2])
+			sum := op(src.Data[src.Data[i+1]], src.Data[src.Data[i+2]])
 			idx := src.Data[i+3]
 			src.Data[idx] = sum
 		}

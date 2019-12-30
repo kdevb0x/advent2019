@@ -8,7 +8,6 @@ import (
 	"bufio"
 	"encoding/binary"
 	"errors"
-	"fmt"
 	"io"
 	"os"
 	"strconv"
@@ -33,17 +32,17 @@ func ParseSourceCodeFile(path string) (*SourceCode, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer f.Close()
 	var code SourceCode
 	code.FilePath = path
 	s := bufio.NewScanner(f)
 	// s.Split(bufio.ScanRunes)
 	for s.Scan() {
-		if err := s.Err(); err == io.EOF {
+		if s.Err() == io.EOF {
 			break
 		}
 		tx := s.Text()
 		txs := strings.Split(tx, ",")
-		fmt.Println(txs)
 		for _, n := range txs {
 
 			// remove commas so index matched position in code.Data
