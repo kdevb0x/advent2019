@@ -34,6 +34,7 @@ func ParseSourceCodeFile(path string) (*SourceCode, error) {
 	var code SourceCode
 	code.FilePath = path
 	s := bufio.NewScanner(f)
+	s.Split(bufio.ScanRunes)
 	for s.Scan() {
 		tx := s.Text()
 		// remove commas so index matched position in code.Data
