@@ -91,7 +91,7 @@ func (c *SourceCode) SetValue(idx, val int) error {
 
 // Perform executes the operation op with parameters c.Data[p1] and c.Data[p2].
 func (c *SourceCode) Perform(op int, p1, p2 int) error {
-	if !validOpCode((opcode)(op)) {
+	if !ValidOpCode((Opcode)(op)) {
 		return ErrInvalidOpCodeErr
 	}
 	p1idx := c.Data[p1]
@@ -100,11 +100,11 @@ func (c *SourceCode) Perform(op int, p1, p2 int) error {
 	p1val := c.Data[p1idx]
 	p2val := c.Data[p2idx]
 	setidx := c.Data[p2+1]
-	if oper, ok := ops[opcode(op)]; !ok {
+	if oper, ok := Ops[Opcode(op)]; !ok {
 		return ErrInvalidOpCodeErr
 	} else {
 		fval := oper(p1val, p2val)
-		if opcode(fval) == hlt {
+		if Opcode(fval) == Hlt {
 			return ErrEncounteredHalt
 		}
 		c.Data[setidx] = fval
