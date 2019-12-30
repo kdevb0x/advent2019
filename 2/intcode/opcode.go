@@ -12,17 +12,17 @@ const (
 	AddHex           // 0x01
 	MulHex           // 0x02
 
-	HltHex OpcodeHex = 0x63 // 99
+	HaltHex OpcodeHex = 0x63 // 99
 )
 
 // opcode in decimal format
 type Opcode int
 
 const (
-	_   Opcode = iota
-	Add        // 1
-	Mul        // 2
-	Hlt Opcode = 99
+	_    Opcode = iota
+	Add         // 1
+	Mul         // 2
+	Halt Opcode = 99
 )
 
 var Ops = map[Opcode]func(...int) int{
@@ -38,13 +38,13 @@ var Ops = map[Opcode]func(...int) int{
 		}
 		return oprnd[0] * oprnd[1]
 	},
-	Hlt: func(oprnd ...int) int {
-		return int(Hlt)
+	Halt: func(oprnd ...int) int {
+		return int(Halt)
 	},
 }
 
 func ValidOpCode(n Opcode) bool {
-	if n == Add || n == Mul || n == Hlt {
+	if n == Add || n == Mul || n == Halt {
 		return true
 	}
 	return false

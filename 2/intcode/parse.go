@@ -104,7 +104,7 @@ func (c *SourceCode) Perform(op int, p1, p2 int) error {
 		return ErrInvalidOpCodeErr
 	} else {
 		fval := oper(p1val, p2val)
-		if Opcode(fval) == Hlt {
+		if Opcode(fval) == Halt {
 			return ErrEncounteredHalt
 		}
 		c.Data[setidx] = fval
