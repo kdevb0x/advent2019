@@ -11,6 +11,7 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var (
@@ -34,20 +35,24 @@ func ParseSourceCodeFile(path string) (*SourceCode, error) {
 	var code SourceCode
 	code.FilePath = path
 	s := bufio.NewScanner(f)
-	s.Split(bufio.ScanRunes)
+	// s.Split(bufio.ScanRunes)
 	for s.Scan() {
 		tx := s.Text()
-		// remove commas so index matched position in code.Data
-		if tx == "," || tx == " " || tx == "\n" {
-			continue
-		}
-		tok, err := strconv.Atoi(tx)
-		if err != nil {
-			println(err.Error())
-			return nil, err
-		}
+		txs := strings.Split(tx, ",")
+		for _, n := range txs {
 
-		code.Data = append(code.Data, int64(tok))
+			// remove commas so index matched position in code.Data
+			if n == "," || n == " " || n == "\n" {
+				continue
+			}
+			tok, err := strconv.Atoi(n)
+			if err != nil {
+				println(err.Error())
+				return nil, err
+			}
+
+			code.Data = append(code.Data, int64(tok))
+		}
 	}
 	return &code, nil
 

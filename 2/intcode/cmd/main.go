@@ -17,6 +17,8 @@ func interpretSource(fpath string) string {
 	if err != nil {
 		panic(err)
 	}
+	src.Data[1] = 12
+	src.Data[2] = 2
 	for i := 0; i < len(src.Data); i += 4 {
 		if src.Data[i] == int64(ic.Halt) {
 			break
