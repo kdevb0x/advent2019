@@ -38,7 +38,7 @@ func ParseSourceCodeFile(path string) (*SourceCode, error) {
 	for s.Scan() {
 		tx := s.Text()
 		// remove commas so index matched position in code.Data
-		if tx == "," || tx == " " {
+		if tx == "," || tx == " " || tx == "\n" {
 			continue
 		}
 		tok, err := strconv.Atoi(tx)
