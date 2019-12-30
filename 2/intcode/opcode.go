@@ -5,7 +5,7 @@
 package intcode
 
 // opcode in hexidecimal format
-type OpcodeHex int
+type OpcodeHex int64
 
 const (
 	_      OpcodeHex = iota
@@ -16,7 +16,7 @@ const (
 )
 
 // opcode in decimal format
-type Opcode int
+type Opcode int64
 
 const (
 	_    Opcode = iota
@@ -25,21 +25,15 @@ const (
 	Halt Opcode = 99
 )
 
-var Ops = map[Opcode]func(...int) int{
-	Add: func(oprnd ...int) int {
-		if len(oprnd) != 2 {
-			return 0
-		}
-		return oprnd[0] + oprnd[1]
+var Ops = map[Opcode]func(int64, int64) int64{
+	Add: func(op1, op2 int64) int64 {
+		return AsmAdd(op1, op2)
 	},
-	Mul: func(oprnd ...int) int {
-		if len(oprnd) != 2 {
-			return 0
-		}
-		return oprnd[0] * oprnd[1]
+	Mul: func(op1, op2 int64) int64 {
+		return AsmMul(op1, op2)
 	},
-	Halt: func(oprnd ...int) int {
-		return int(Halt)
+	Halt: func(op1, op2 int64) int64 {
+		return int64(Halt)
 	},
 }
 

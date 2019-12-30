@@ -22,7 +22,7 @@ var (
 
 type SourceCode struct {
 	FilePath string
-	Data     []int // instructions and arguments
+	Data     []int64 // instructions and arguments
 
 }
 
@@ -46,7 +46,7 @@ func ParseSourceCodeFile(path string) (*SourceCode, error) {
 			return nil, err
 		}
 
-		code.Data = append(code.Data, tok)
+		code.Data = append(code.Data, int64(tok))
 	}
 	return &code, nil
 
@@ -71,16 +71,16 @@ func (c *SourceCode) WriterAt(p []byte, off int64) (n int, err error) {
 		return 0, ErrNegIdxErr
 	}
 	m, count := binary.Varint(p)
-	c.Data[off] = int(m)
+	c.Data[off] = m
 	return count, nil
 }
 
-func (c *SourceCode) SetValue(idx, val int) error {
+func (c *SourceCode) SetValue(idx int, val int64) error {
 	if idx < 0 {
 		return ErrNegIdxErr
 	}
 
-	str := strconv.FormatInt(int64(val), 10)
+	str := strconv.FormatInt(val, 10)
 	_, err := c.WriterAt([]byte(str), int64(idx))
 	if err != nil {
 		return err
@@ -90,7 +90,7 @@ func (c *SourceCode) SetValue(idx, val int) error {
 }
 
 // Perform executes the operation op with parameters c.Data[p1] and c.Data[p2].
-func (c *SourceCode) Perform(op int, p1, p2 int) error {
+func (c *SourceCode) Perform(op int64, p1, p2 int) error {
 	if !ValidOpCode((Opcode)(op)) {
 		return ErrInvalidOpCodeErr
 	}
