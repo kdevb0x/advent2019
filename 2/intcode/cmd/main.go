@@ -5,7 +5,7 @@
 package main
 
 import (
-	ic "../intcode"
+	ic "github.com/kdevb0x/advent2019/2/intcode"
 )
 
 func main() {

@@ -1,5 +1,3 @@
-module advent2019
+module github.com/kdevb0x/advent2019
 
 go 1.14
-
-require github.com/spf13/pflag v1.0.5
