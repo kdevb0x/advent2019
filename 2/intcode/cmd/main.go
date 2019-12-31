@@ -32,8 +32,7 @@ func interpretSource(fpath string) (code string, noun int64, verb int64) {
 					src.Data[idx] = sum
 				case ic.Mul:
 					prod := ic.AsmMul(src.Data[src.Data[i+1]], src.Data[src.Data[i+2]])
-					idx := src.Data[i+3]
-					src.Data[idx] = prod
+					src.Data[src.Data[i+3]] = prod
 
 				}
 			}
