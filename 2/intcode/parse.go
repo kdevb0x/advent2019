@@ -22,8 +22,9 @@ var (
 )
 
 type SourceCode struct {
-	FilePath string
-	Data     []int64 // instructions and arguments
+	FilePath   string
+	Data       []int64 // instructions and arguments
+	StartState []int64 // the initial memory state of the program.
 
 }
 
@@ -59,6 +60,7 @@ func ParseSourceCodeFile(path string) (*SourceCode, error) {
 			code.Data = append(code.Data, int64(tok))
 		}
 	}
+	code.StartState = code.Data
 	return &code, nil
 
 }
@@ -130,3 +132,7 @@ func AsmAdd(r0, r1 int64) int64
 
 // Implemented in asm
 func AsmMul(r0, r1 int64) int64
+
+func (c *SourceCode) Reset() {
+	c.Data = c.StartState
+}
