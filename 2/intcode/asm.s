@@ -5,14 +5,14 @@
 #include "textflag.h"
 #include "go_asm.h"
 
-TEXT ·AsmAdd(SB), NOSPLIT, $0-24
+TEXT ·AsmAdd(SB), NOSPLIT|NOFRAME, $0-24
 	MOVQ    r0+0(FP), BX
 	MOVQ    r1+8(FP), AX
 	ADDQ 	BX, AX
 	MOVQ    AX, ret+16(FP)
 	RET
 
-TEXT ·AsmMul(SB), NOSPLIT, $0-24
+TEXT ·AsmMul(SB), NOSPLIT|NOFRAME, $0-24
 	MOVQ    r0+0(FP), BX
 	MOVQ    r1+8(FP), AX
 	IMULL 	BX, AX

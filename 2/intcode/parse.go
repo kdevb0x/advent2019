@@ -5,10 +5,12 @@
 package intcode
 
 import (
+	"bytes"
 	"bufio"
 	"encoding/binary"
 	"errors"
 	"io"
+	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
@@ -29,6 +31,7 @@ type SourceCode struct {
 }
 
 func ParseSourceCodeFile(path string) (*SourceCode, error) {
+	/*
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -58,6 +61,27 @@ func ParseSourceCodeFile(path string) (*SourceCode, error) {
 			}
 
 			code.Data = append(code.Data, int64(tok))
+		}
+	}
+	code.StartState = code.Data
+	*/
+	var code SourceCode
+	code.FilePath = path
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	bs := bytes.Split(b, []byte(","))
+	for _, n := range bs {
+		switch q := string(bs) {
+		case q == " ", q == "\n", "":
+			continue
+		default:
+			t, err := strconv.ParseInt(q, 10, 64)
+			if err != nil {
+				return nil, err
+			}
+			code.Data = append(code.Data, t)
 		}
 	}
 	code.StartState = code.Data
@@ -128,8 +152,10 @@ func (c *SourceCode) Perform(op int64, p1, p2 int) error {
 }
 
 // Implemented in assembly
+//go:noescape
 func AsmAdd(r0, r1 int64) int64
 
+//go:noescape
 // Implemented in asm
 func AsmMul(r0, r1 int64) int64
 
