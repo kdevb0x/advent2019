@@ -68,8 +68,11 @@ func ParseSourceCodeFile(path string) (*SourceCode, error) {
 	if err != nil {
 		return nil, err
 	}
-	bs := bytes.Split(b, []byte(","))
+	bs := bytes.Split(b, []byte{','})
 	for _, n := range bs {
+		if bytes.ContainsAny(n, " \n") {
+			continue
+		}
 		switch q := string(n); {
 		case q == " ", q == "\n", q == "":
 			continue
