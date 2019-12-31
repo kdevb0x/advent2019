@@ -6,14 +6,11 @@ package intcode
 
 import (
 	"bytes"
-	"bufio"
 	"encoding/binary"
 	"errors"
 	"io"
 	"io/ioutil"
-	"os"
 	"strconv"
-	"strings"
 )
 
 var (
@@ -32,38 +29,38 @@ type SourceCode struct {
 
 func ParseSourceCodeFile(path string) (*SourceCode, error) {
 	/*
-	f, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	var code SourceCode
-	code.FilePath = path
-	s := bufio.NewScanner(f)
-	// s.Split(bufio.ScanRunes)
-	for s.Scan() {
-		if s.Err() == io.EOF {
-			break
+		f, err := os.Open(path)
+		if err != nil {
+			return nil, err
 		}
-		tx := s.Text()
-		txs := strings.Split(tx, ",")
-		for _, n := range txs {
-
-			// remove commas so index matched position in code.Data
-			switch n {
-			case ",", " ", "\n", "":
-				continue
+		defer f.Close()
+		var code SourceCode
+		code.FilePath = path
+		s := bufio.NewScanner(f)
+		// s.Split(bufio.ScanRunes)
+		for s.Scan() {
+			if s.Err() == io.EOF {
+				break
 			}
-			tok, err := strconv.Atoi(n)
-			if err != nil {
-				println(err.Error())
-				return nil, err
-			}
+			tx := s.Text()
+			txs := strings.Split(tx, ",")
+			for _, n := range txs {
 
-			code.Data = append(code.Data, int64(tok))
+				// remove commas so index matched position in code.Data
+				switch n {
+				case ",", " ", "\n", "":
+					continue
+				}
+				tok, err := strconv.Atoi(n)
+				if err != nil {
+					println(err.Error())
+					return nil, err
+				}
+
+				code.Data = append(code.Data, int64(tok))
+			}
 		}
-	}
-	code.StartState = code.Data
+		code.StartState = code.Data
 	*/
 	var code SourceCode
 	code.FilePath = path
@@ -73,8 +70,8 @@ func ParseSourceCodeFile(path string) (*SourceCode, error) {
 	}
 	bs := bytes.Split(b, []byte(","))
 	for _, n := range bs {
-		switch q := string(bs) {
-		case q == " ", q == "\n", "":
+		switch q := string(n); {
+		case q == " ", q == "\n", q == "":
 			continue
 		default:
 			t, err := strconv.ParseInt(q, 10, 64)
