@@ -62,30 +62,25 @@ func ParseSourceCodeFile(path string) (*SourceCode, error) {
 		}
 		code.StartState = code.Data
 	*/
-	var code SourceCode
+	var code = new(SourceCode)
 	code.FilePath = path
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
-	bs := bytes.Split(b, []byte{','})
+	bs := bytes.Split(b, []byte(","))
 	for _, n := range bs {
-		if bytes.ContainsAny(n, " \n") {
-			continue
+		n = bytes.Trim(n, "\n")
+		q := string(n)
+		t, err := strconv.ParseInt(q, 10, 64)
+		if err != nil {
+			return nil, err
 		}
-		switch q := string(n); {
-		case q == " ", q == "\n", q == "":
-			continue
-		default:
-			t, err := strconv.ParseInt(q, 10, 64)
-			if err != nil {
-				return nil, err
-			}
-			code.Data = append(code.Data, t)
-		}
+		code.Data = append(code.Data, int64(t))
 	}
-	code.StartState = code.Data
-	return &code, nil
+	code.StartState = make([]int64, len(code.Data))
+	copy(code.StartState, code.Data[:])
+	return code, nil
 
 }
 
@@ -160,5 +155,5 @@ func AsmAdd(r0, r1 int64) int64
 func AsmMul(r0, r1 int64) int64
 
 func (c *SourceCode) Reset() {
-	c.Data = c.StartState
+	c.Data = c.StartState[:]
 }
