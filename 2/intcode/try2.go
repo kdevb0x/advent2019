@@ -53,3 +53,11 @@ func RunProgram(m MemState) MemState {
 	}
 	return m
 }
+
+//go:noescape
+// AsmAdd is an ADD instruction implemented in assembly.
+func AsmAdd(a, b int64) int64
+
+//go:noescape
+// AsmMul is an MUL instruction implemented in assembly.
+func AsmMul(a, b int64) int64
