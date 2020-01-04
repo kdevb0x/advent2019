@@ -5,6 +5,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/kdevb0x/advent2019/2/intcode"
 )
 
@@ -14,6 +16,8 @@ func ex2() (noun, verb int64) {
 	if err != nil {
 		panic(err)
 	}
+	initState := make([]int64, len(m))
+	copy(initState, m)
 	for n := 0; n <= 99; n++ {
 		for v := 0; v <= 99; v++ {
 			m[1] = int64(n)
@@ -22,11 +26,15 @@ func ex2() (noun, verb int64) {
 			if final[0] == match {
 				return int64(n), int64(v)
 			}
+			copy(m, initState)
 		}
 	}
 	return -1, -1
 }
 func main() {
 	noun, verb := ex2()
+	if noun == -1 && verb == -1 {
+		log.Fatal("unable to find match")
+	}
 	println((100 * noun) + verb)
 }

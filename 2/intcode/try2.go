@@ -5,9 +5,9 @@
 package intcode
 
 import (
-	"bytes"
 	"io/ioutil"
 	"strconv"
+	"strings"
 )
 
 type MemState []int64
@@ -17,38 +17,38 @@ func LoadProgram(path string) (MemState, error) {
 	if err != nil {
 		return nil, err
 	}
-	t := bytes.Trim(f, ",")
 
-	var mem = make([]int64, len(f))
-	for i, n := range t {
-
-		q, err := strconv.ParseInt(string(n), 10, 64)
+	n := strings.ReplaceAll(string(f), "\n", "")
+	r := strings.Split(n, ",")
+	var mem []int64
+	for _, n := range r {
+		q, err := strconv.Atoi(n)
 		if err != nil {
 			return nil, err
 		}
-		mem[i] = q
-
+		mem = append(mem, int64(q))
 	}
+
 	return mem, nil
+
 }
 
 func RunProgram(m MemState) MemState {
-	var pc int
-	for i := 0; i < len(m); i += pc {
+	// var pc int
+out:
+	for i := 0; i < len(m); i += 4 {
 		switch m[i] {
 		case 1:
 			ansidx, arg1idx, arg2idx := m[i+3], m[i+1], m[i+2]
 			m[ansidx] = m[arg1idx] + m[arg2idx]
-			pc = 4
+		// 	pc = 4
 		case 2:
 			ansidx, arg1idx, arg2idx := m[i+3], m[i+1], m[i+2]
 			m[ansidx] = m[arg1idx] * m[arg2idx]
-			pc = 4
+			// pc = 4
 		case 99:
-			pc = 1
-			break
-		default:
-			println("unrecognized operation" + string(m[i]))
+			// pc = 1
+			break out
 		}
 	}
 	return m
